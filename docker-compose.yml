@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodbv1
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  node:
+    build: ./llm_node
+    container_name: node-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/llm_database
+    volumes:
+      - ./llm_node:/app
+
+volumes:
+  mongo-data:
